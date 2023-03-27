@@ -54,6 +54,17 @@ final.data <- final.data %>%
                rename(state_long=state, county_long=county), 
              by=c("fips", "year"))
 
+# calculate star rating (Part C rating if plan doesn't offer part D, otherwise Part D rating if available)
+final.data <- final.data %>% ungroup() %>%
+  mutate(Star_Rating = 
+           case_when(
+             partd == "No" ~ partc_score,
+             partd == "Yes" & is.na(partcd_score) ~ partc_score,
+             partd == "Yes" & !is.na(partcd_score) ~ partcd_score,
+             TRUE ~ NA_real_
+           ))
+
+
 final.state <- final.data %>% 
   group_by(state) %>% 
   summarize(state_name=last(state_long, na.rm=TRUE))
@@ -72,18 +83,8 @@ final.data <- final.data %>%
              by=c("ssa","year"))
 
 
-# calculate star rating (Part C rating if plan doesn't offer part D, otherwise Part D rating if available)
-final.data <- final.data %>%
-  mutate(Star_Rating = 
-           case_when(
-             partd == "No" ~ partc_score,
-             partd == "Yes" & is.na(partcd_score) ~ partc_score,
-             partd == "Yes" & !is.na(partcd_score) ~ partcd_score,
-             TRUE ~ NA_real_
-           ))
-
 # calculate relevant benchmark rate based on star rating
-final.data <- final.data %>%
+final.data <- final.data %>% ungroup() %>%
   mutate(ma_rate =
            case_when(
              year<2012 ~ risk_ab,
