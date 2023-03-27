@@ -3,14 +3,14 @@
 ##############################################################################
 
 ## Assign yearly file paths
-ffs.path.2007=paste0("data/input/ffs-costs/Aged Only/Aged07.csv")
-ffs.path.2008=paste0("data/input/ffs-costs/Aged Only/AGED08.csv")
-ffs.path.2009=paste0("data/input/ffs-costs/Aged Only/aged09.csv")
-ffs.path.2010=paste0("data/input/ffs-costs/Aged Only/aged10.csv")
-ffs.path.2011=paste0("data/input/ffs-costs/Aged Only/aged11.csv")
-ffs.path.2012=paste0("data/input/ffs-costs/Aged Only/aged12.csv")
-ffs.path.2013=paste0("data/input/ffs-costs/Aged Only/aged13.csv")
-ffs.path.2014=paste0("data/input/ffs-costs/Aged Only/aged14.csv")
+ffs.path.2007=paste0("data/input/ffs-costs/Aged07.csv")
+ffs.path.2008=paste0("data/input/ffs-costs/AGED08.csv")
+ffs.path.2009=paste0("data/input/ffs-costs/aged09.csv")
+ffs.path.2010=paste0("data/input/ffs-costs/aged10.csv")
+ffs.path.2011=paste0("data/input/ffs-costs/aged11.csv")
+ffs.path.2012=paste0("data/input/ffs-costs/aged12.csv")
+ffs.path.2013=paste0("data/input/ffs-costs/aged13.csv")
+ffs.path.2014=paste0("data/input/ffs-costs/aged14.csv")
 ffs.path.2015=paste0("data/input/ffs-costs/FFS15.xlsx")
 
 drops=array(dim=c(9,2))

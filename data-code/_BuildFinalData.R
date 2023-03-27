@@ -1,15 +1,20 @@
-########################################################################################
-## Author:        Ian McCarthy
-## Date Created:  7/8/2019
-## Date Edited:   1/24/2022
-## Notes:         R file to build Medicare Advantage dataset
-########################################################################################
+
+# Meta --------------------------------------------------------------------
+# Author:        Ian McCarthy
+# Date Created:  7/8/2019
+# Date Edited:   1/24/2022
+# Notes:         R file to build Medicare Advantage dataset
+
+
+
+# Preliminaries -----------------------------------------------------------
 if (!require("pacman")) install.packages("pacman")
 pacman::p_load(tidyverse, ggplot2, dplyr, lubridate, stringr, readxl, data.table, gdata)
 
-#########################################################################
-## Build plan-level dataset
-#########################################################################
+
+
+# Call individual scripts -------------------------------------------------
+
 source("data-code/1_Plan_Data.R")
 source("data-code/2_Plan_Characteristics.R")
 source("data-code/3_Service_Areas.R")
@@ -19,9 +24,9 @@ source("data-code/6_Risk_Rebates.R")
 source("data-code/7_MA_Benchmark.R")
 source("data-code/8_FFS_Costs.R")
 
-#########################################################################
-## Organize final data
-#########################################################################
+
+
+# Tidy data ---------------------------------------------------------------
 full.ma.data <- read_rds("data/output/full_ma_data.rds")
 contract.service.area <- read_rds("data/output/contract_service_area.rds")
 star.ratings <- read_rds("data/output/star_ratings.rds")
@@ -67,7 +72,7 @@ final.data <- final.data %>%
              by=c("ssa","year"))
 
 
-## calculate star rating (Part C rating if plan doesn't offer part D, otherwise Part D rating if available)
+# calculate star rating (Part C rating if plan doesn't offer part D, otherwise Part D rating if available)
 final.data <- final.data %>%
   mutate(Star_Rating = 
            case_when(
@@ -77,7 +82,7 @@ final.data <- final.data %>%
              TRUE ~ NA_real_
            ))
 
-## calculate relevant benchmark rate based on star rating
+# calculate relevant benchmark rate based on star rating
 final.data <- final.data %>%
   mutate(ma_rate =
            case_when(
@@ -95,7 +100,7 @@ final.data <- final.data %>%
              TRUE ~ NA_real_
            ))
 
-## final premium and bid variables
+# final premium and bid variables
 final.data <- final.data %>%
   mutate(basic_premium=
            case_when(
@@ -110,7 +115,7 @@ final.data <- final.data %>%
              TRUE ~ NA_real_
            ))
 
-## incorporate ffs cost data by ssa
+# incorporate ffs cost data by ssa
 final.data <- final.data %>%
   left_join( ffs.costs.final %>%
                select(-state), 
@@ -123,6 +128,7 @@ final.data <- final.data %>%
     TRUE ~ NA_real_
   ))
 
+# save final dataset
 write_rds(final.data,"data/output/final_ma_data.rds")
 
 
